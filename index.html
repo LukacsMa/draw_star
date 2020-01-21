@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Page Title</title>
+    </head>
+    <body>
+       <canvas id="stars" width="400" height="500"></canvas>
+       <script>
+
+function colorStar(x,y,a){
+  let coords = [];
+  
+  let canvas = document.getElementById("stars")
+  let ctx = canvas.getContext('2d');
+ 
+  
+  //top point
+  coords.push ( [x, y-a] );
+ let points  = 5;
+  //other points
+  for (let i = 1 ; i < points; i++){
+    let csx = x - Math.sin(i * Math.PI / 180 * (360/points) )*a ;
+    let csy = y - Math.cos(i * Math.PI / 180 * (360/points))*a;
+    
+    coords.push ( [csx, csy] );
+  }
+
+let coordsToDraw = [];
+let count=0;
+for (let i = 0; i < coords.length; i++){
+    if(count < coords.length){
+        coordsToDraw.push(coords[count]);
+        count+=2;
+    }else{
+        count=1;
+        coordsToDraw.push(coords[count]);
+        count+=2;
+    }
+}
+
+
+if(points %2!==0){
+coordsToDraw.push(coords[0]);
+} else {
+    coordsToDraw.unshift(coords[coords.length-2])
+    coordsToDraw.push(coords[1]);
+}
+    
+
+let r = 255;
+let b = 0;
+let g = 0
+let color;
+let w = 1;
+  
+ 
+for(let i = 1; i < coordsToDraw.length; i++){
+setTimeout(function (){
+if(i === points/2+1 && points % 2===0){
+    ctx.moveTo(coordsToDraw[1][0], coordsToDraw[1][1]);
+   ctx.lineTo(coordsToDraw[i+1][0],coordsToDraw[i+1][1]);
+    ctx.fill();
+} else {
+    ctx.beginPath();
+   ctx.moveTo(coordsToDraw[i-1][0],coordsToDraw[i-1][1]);
+     ctx.lineTo(coordsToDraw[i][0], coordsToDraw[i][1]);
+   r -= 250/points;
+   b += 200/points;
+    g += 250/points;
+    color = "rgb(" + r + "," + g + "," + b + ")";
+    w++;
+    ctx.lineWidth = w;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+}},500*i)
+}
+  }  
+   
+
+colorStar(180,200,150);
+
+       </script>
+    </body>
+</html>
